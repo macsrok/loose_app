@@ -1,0 +1,10 @@
+<% cache [Current.user, 'rooms_nav', Current.user.rooms.maximum(:updated_at)&.to_i] do %>
+  <div class="flex items-center space-x-4">
+    <% Current.user.rooms.each do |room| %>
+      <% cache [room, 'nav_link'] do %>
+        <%= link_to room.name, room_path(room), 
+            class: "text-sm font-medium text-gray-700 transition-all duration-150 pb-1 #{current_page?(room_path(room)) ? 'border-b-2 border-blue-600' : 'hover:border-b-2 hover:border-blue-600'}" %>
+      <% end %>
+    <% end %>
+  </div>
+<% end %> 

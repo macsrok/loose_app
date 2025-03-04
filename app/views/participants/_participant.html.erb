@@ -1,0 +1,39 @@
+<div id="<%= dom_id(participant) %>" class="group flex items-center justify-between p-2 hover:bg-gray-50 rounded-lg">
+  <div class="flex items-center">
+    <div class="flex-shrink-0">
+      <% if participant.user.avatar.attached? %>
+        <%= image_tag participant.user.avatar_variant(40), class: "w-10 h-10 rounded-full object-cover" %>
+      <% else %>
+        <svg class="w-10 h-10 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+        </svg>
+      <% end %>
+    </div>
+    <div class="ml-3">
+      <p class="text-sm font-medium text-gray-900"><%= participant.user.display_name %></p>
+      <p class="text-xs text-gray-500"><%= participant.user.email_address %></p>
+    </div>
+  </div>
+  
+  <% if participant.persisted? %>
+    <% if participant.user == Current.user %>
+      <%= button_to room_participant_path(participant.room, participant), 
+            method: :delete,
+            class: "opacity-0 group-hover:opacity-100 transition-opacity duration-150 p-1 hover:bg-red-50 rounded-full",
+            form: { data: { turbo: false, turbo_confirm: "Are you sure you want to leave this room?" } } do %>
+        <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      <% end %>
+    <% else %>
+      <%= button_to room_participant_path(participant.room, participant), 
+            method: :delete,
+            class: "opacity-0 group-hover:opacity-100 transition-opacity duration-150 p-1 hover:bg-red-50 rounded-full",
+            form: { data: { turbo_confirm: "Are you sure you want to remove this participant?" } } do %>
+        <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      <% end %>
+    <% end %>
+  <% end %>
+</div> 

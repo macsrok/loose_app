@@ -1,0 +1,91 @@
+<%= turbo_stream_from @room %>
+
+<div class="container px-5 h-full" data-controller="modal">
+  <div class="h-full flex">
+    <div class="w-64 border-r border-gray-200 p-6 overflow-y-auto flex flex-col">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-lg font-medium text-gray-900">Participants</h2>
+      </div>
+      
+      <div id="participants" class="space-y-4 flex-1">
+        <% @room.participants.each do |participant| %>
+          <%= render "participants/participant", participant: participant %>
+        <% end %>
+      </div>
+
+      <% available_users = User.where.not(id: @room.user_ids) %>
+      <% if available_users.exists? %>
+        <button type="button" data-action="click->modal#open" class="mt-4 w-full inline-flex items-center justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+          <svg class="w-5 h-5 mr-2 -ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+          </svg>
+          Add Participant
+        </button>
+      <% else %>
+        <div class="mt-4 text-center text-sm text-gray-500">
+          All users are participants
+        </div>
+      <% end %>
+    </div>
+
+    <div class="flex-1 flex flex-col h-full w-full">
+      <div class="p-6 border-b border-gray-200">
+        <% if alert = flash[:alert] %>
+          <p class="py-2 px-3 bg-red-50 mb-5 text-red-500 font-medium rounded-lg inline-block" id="alert"><%= alert %></p>
+        <% end %>
+
+        <% if notice = flash[:notice] %>
+          <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
+        <% end %>
+
+        <% cache [@room, 'header', @room.participants.map { |p| p.user.avatar.attached? ? p.user.avatar.created_at : nil }] do %>
+          <div class="flex items-center justify-between">
+            <h1 class="font-bold text-4xl"><%= @room.name %></h1>
+            <%= render "rooms/participant_count", room: @room %>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="flex-1 overflow-y-auto p-6" data-controller="messages" data-messages-target="container">
+        <% cache [@room, 'messages', @room.messages.visible.maximum(:updated_at)&.to_i, @room.participants.map { |p| p.user.avatar.attached? ? p.user.avatar.created_at : nil }] do %>
+          <div id="messages" class="space-y-4">
+            <% @room.messages.visible.each do |message| %>
+              <%= render "messages/message", message: message %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="p-6 border-t border-gray-200">
+        <%= form_with(model: [@room, Message.new], class: "flex space-x-4", id: "message_form", data: { controller: "reset-form", action: "turbo:submit-end->reset-form#reset" }) do |f| %>
+          <div class="flex-1 flex flex-col">
+            <div class="relative">
+              <%= f.text_area :content, class: "w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 min-h-[40px] max-h-[200px] resize-none", placeholder: "Type your message...", rows: 1, data: { action: "input->reset-form#adjustHeight" } %>
+              <div class="absolute right-2 bottom-2">
+                <%= f.file_field :image, class: "hidden", data: { action: "change->reset-form#preview" } %>
+                <%= f.label :image, class: "cursor-pointer p-2 text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-100", title: "Upload image" do %>
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                  </svg>
+                <% end %>
+              </div>
+            </div>
+            <div id="image-preview" class="mt-2 hidden">
+              <div class="relative inline-block">
+                <%= image_tag "", class: "max-h-32 rounded-lg", data: { reset_form_target: "preview" } %>
+                <button type="button" class="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600" data-action="click->reset-form#removeImage">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+          <%= f.submit "Send", class: "inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <%= render "add_participant_modal", room: @room, available_users: User.where.not(id: @room.user_ids) %>
+</div> 

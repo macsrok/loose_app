@@ -1,0 +1,28 @@
+<div class="min-h-screen bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="text-center">
+      <div class="flex justify-center mb-8">
+        <%= image_tag "loose.png", class: "w-24 h-24" %>
+      </div>
+      
+      <h1 class="text-4xl font-black text-gray-900 mb-6">
+        Welcome to Loose
+      </h1>
+      
+      <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+        Loose is a modern Slack clone that helps teams communicate and collaborate effectively. 
+        Create rooms, share messages, and stay connected with your team in real-time.
+      </p>
+
+      <div class="flex justify-center space-x-4">
+        <%= link_to new_session_path, class: "inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" do %>
+          Sign in
+        <% end %>
+        
+        <%= link_to new_user_path, class: "inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" do %>
+          Create an account
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div> 

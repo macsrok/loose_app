@@ -1,0 +1,23 @@
+<% cache [message, message.user, message.user.avatar.attached? ? message.user.avatar.created_at : nil] do %>
+  <div class="flex items-start space-x-3">
+    <div class="flex-shrink-0">
+      <% if message.user.avatar.attached? %>
+        <%= image_tag message.user.avatar_variant(32), class: "w-8 h-8 rounded-full object-cover" %>
+      <% else %>
+        <svg class="w-8 h-8 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+        </svg>
+      <% end %>
+    </div>
+    <div class="flex-1">
+      <div class="flex items-center space-x-2">
+        <p class="text-sm font-medium text-gray-900"><%= message.user.display_name %></p>
+        <span class="text-xs text-gray-500"><%= message.created_at.strftime("%B %d, %Y %H:%M") %></span>
+      </div>
+      <p class="mt-1 text-sm text-gray-700"><%= message.content %></p>
+      <% if message.image.attached? %>
+        <%= image_tag message.image, class: "mt-2 max-w-md rounded-lg" %>
+      <% end %>
+    </div>
+  </div>
+<% end %> 

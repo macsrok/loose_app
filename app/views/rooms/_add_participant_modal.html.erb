@@ -1,0 +1,45 @@
+<div id="add-participant-modal" data-modal-target="modal" class="hidden fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
+  <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+    <div class="px-4 py-5 sm:p-6">
+      <h3 class="text-lg font-medium text-gray-900 mb-4">Add Participants</h3>
+      <div id="add-participant-error"></div>
+      
+      <%= form_with(model: [room, Participant.new], class: "contents") do |f| %>
+        <div class="bg-white border border-gray-200 rounded-lg divide-y divide-gray-200">
+          <% available_users.each do |user| %>
+            <div class="p-4 hover:bg-gray-50 cursor-pointer transition-colors duration-150 border-l-4 border-l-transparent" data-controller="checkbox" data-action="click->checkbox#toggle">
+              <div class="flex items-center">
+                <div class="flex-shrink-0">
+                  <% if user.avatar.attached? %>
+                    <%= image_tag user.avatar_variant(40), class: "w-10 h-10 rounded-full object-cover" %>
+                  <% else %>
+                    <svg class="w-10 h-10 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+                    </svg>
+                  <% end %>
+                </div>
+                <div class="ml-3">
+                  <p class="text-sm font-medium text-gray-900"><%= user.display_name %></p>
+                  <p class="text-xs text-gray-500"><%= user.email_address %></p>
+                </div>
+                <div class="ml-auto">
+                  <%= f.check_box :user_id, { multiple: true, class: "sr-only", data: { checkbox_target: "input" } }, user.id, nil %>
+                  <svg data-checkbox-target="check" class="hidden w-6 h-6 text-green-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+
+        <div class="mt-6 flex justify-end space-x-3">
+          <button type="button" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" data-action="click->modal#close">
+            Cancel
+          </button>
+          <%= f.submit "Add Selected", class: "px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div> 
