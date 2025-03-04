@@ -31,6 +31,8 @@ A modern Slack-like chat application built with Ruby on Rails 8.
 
 ## Technical Stack
 
+- **Ruby Version**: 3.3.0
+- **Rails Version**: 8.0.1
 - **Framework**: Ruby on Rails 8
 - **Frontend**: 
   - Turbo for real-time updates
