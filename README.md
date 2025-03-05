@@ -1,6 +1,11 @@
 # Loose
 
 A modern Slack-like chat application built with Ruby on Rails 8.
+I built this app so that I could practice implimenting the Solid Trifecta of technologies introduced in Rails 8. It has a few rough edges but I built it in a day so that is to be expected.
+
+# Demo
+I have deployed the application to an Oracle Cloud instance using Kamal 2.
+You can visit it at https://loose.joesim.ms
 
 ## Features
 
