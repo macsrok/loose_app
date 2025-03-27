@@ -59,7 +59,8 @@ You can visit it at https://loose.joesim.ms
    rails db:create db:migrate
    ```
 4. Start the server:
-   ```bin/rails dev
+   ```
+   bin/rails dev
    ```
 5. Visit `http://localhost:3000` in your browser
 
