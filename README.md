@@ -68,10 +68,7 @@ You can visit it at https://loose.joesim.ms
 
 The application uses:
 - Modern browser features for optimal performance
-- WebP image support
-- CSS nesting
 - Import maps for JavaScript
-- CSS :has selector support
 
 ## Contributing
 
