@@ -60,7 +60,7 @@ You can visit it at https://loose.joesim.ms
    ```
 4. Start the server:
    ```
-   bin/rails dev
+   bin/dev
    ```
 5. Visit `http://localhost:3000` in your browser
 
